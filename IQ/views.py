@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from django.views.generic import TemplateView
 from rest_framework import status
 from .serializers import UserSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -10,13 +11,17 @@ import random
 from .models import User
 url = "http://notify.eskiz.uz/api/message/sms/send"
 
+class Index(APIView):
+      def get(self, request):
+            return Response("<h1>Sike thaht's a wrooong numbeerrrr!!1</h1>", status=200)
+
 class Registration(APIView):
     def post(self, request):
         data = request.data
         number = data["mobile_number"]
+
         state = random.getstate()
-        
-        payload={'mobile_phone': number,
+        payload={'mobile_phone': str(number),
         'message': f'Eskiz Test {(random.setstate(state),4)*100000}',
         'from': '4546',
         'callback_url': 'http://0000.uz/test.php'}
@@ -27,24 +32,27 @@ class Registration(APIView):
         data['password'] = make_password(number)
         serializer = UserSerializer(data=data)
         user=User.objects.filter(mobile_number=number).last()
-        if user.DoesNotExist:
-            token = RefreshToken.for_user(user)
+        # try:
+        if user:
+                user=User.objects.filter(mobile_number=number).last()
+                token = RefreshToken.for_user(user)
 
-            context = {
-                "refresh":str(token),
-                "access": str(token.access_token),
-                "sms": requests.request("POST", url, headers=headers, data=payload, files=files).text
-            }
-            return Response(context)
+                context = {
+                    "refresh":str(token),
+                    "access": str(token.access_token),
+                    "sms": requests.request("POST", url, headers=headers, data=payload, files=files).text
+                }
+                return Response(context)
+        # except user.DoesNotExist:
         elif serializer.is_valid():
-            serializer.save
-            token = RefreshToken.for_user(serializer.instance)
-            context = {
-                "refresh":str(token),
-                "access": str(token.access_token),
-                "sms": requests.request("POST", url, headers=headers, data=payload, files=files).text
-            }
-            return Response(context)
+                serializer.save
+                token = RefreshToken.for_user(serializer.instance)
+                context = {
+                    "refresh":str(token),
+                    "access": str(token.access_token),
+                    "sms": requests.request("POST", url, headers=headers, data=payload, files=files).text
+                }
+                return Response(context)
         return Response(serializer.errors)
 
 
