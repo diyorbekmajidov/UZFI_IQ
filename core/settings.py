@@ -32,6 +32,7 @@ AUTH_USER_MODEL = 'IQ.User'
 # Application definition
 
 INSTALLED_APPS = [
+    'modeltranslation',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -127,15 +128,29 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
+from django.utils.translation import gettext_lazy as _
+LANGUAGE_CODE = 'uz'
 
-LANGUAGE_CODE = 'en-us'
-
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Tashkent'
 
 USE_I18N = True
 
+USE_L10N = True
+
 USE_TZ = True
 
+
+
+
+LANGUAGES = (
+    ('uz',  _('Uzbek')),
+    ('ru',  _('Russian')),
+    ('en',  _('English')),
+)
+# LOCALE_PATHS = (os.path.join(BASE_DIR, 'locale'), )
+
+MODELTRANSLATION_DEFAULT_LANGUAGE = ('uz')
+MODELTRANSLATION_LANGUAGES = ('uz', 'en', 'ru')
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
