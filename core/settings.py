@@ -26,12 +26,13 @@ SECRET_KEY = 'django-insecure-if%qa7x@ttdx75_wnr+7(e-bt1ortw%wb-k#9j_7ebat_(exr$
 DEBUG = True
 
 ALLOWED_HOSTS = []
-AUTH_USER_MODEL = 'IQ.User'
+AUTH_USER_MODEL = 'users.User'
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'modeltranslation',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -42,8 +43,9 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
-    'IQ.apps.IqConfig',
+    'users.apps.UsersConfig',
     "phonenumber_field",
+    
 ]
 
 REST_FRAMEWORK = {
